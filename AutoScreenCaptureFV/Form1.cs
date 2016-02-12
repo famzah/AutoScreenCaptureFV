@@ -37,6 +37,22 @@ namespace WindowsFormsApplication1
             numericUpDown2.Value = Convert.ToInt32(RegistryHelper.GetSetting("Settings", "Cleanup", "10080"));
         }
 
+        public void HandleAutoStart() {
+            string autoStartConf = RegistryHelper.GetSetting("Settings", "AutoStart", "0");
+            checkBox1.Checked = (autoStartConf == "1");
+
+            if (checkBox1.Checked)
+            {
+                button3_Click(null, null); // click the "Start" button
+                ShowNotifyIcon();
+                //this.Hide(); // the form is not visible by default
+            }
+            else
+            {
+                this.Show();
+            }
+        }
+
         private Bitmap Get_screen()
         {
             Size s = Screen.PrimaryScreen.Bounds.Size;
@@ -107,6 +123,7 @@ namespace WindowsFormsApplication1
             RegistryHelper.SaveSetting("Settings", "Interval", numericUpDown1.Value.ToString());
             RegistryHelper.SaveSetting("Settings", "Cleanup", numericUpDown2.Value.ToString());
             RegistryHelper.SaveSetting("Settings", "RootFolder", textBox1.Text);
+            RegistryHelper.SaveSetting("Settings", "AutoStart", checkBox1.Checked ? "1" : "0");
             button4.Enabled = true;
             timer3.Enabled = true;
         }
@@ -195,20 +212,21 @@ namespace WindowsFormsApplication1
             }
         }
 
+        void ShowNotifyIcon()
+        {
+            notifyIcon1.BalloonTipText = "The capture is still working in background.";
+            notifyIcon1.BalloonTipTitle = this.Text;
+            notifyIcon1.BalloonTipIcon = ToolTipIcon.Info;
+            notifyIcon1.Visible = true;
+            notifyIcon1.ShowBalloonTip(1000);
+        }
+
         private void Form1_Resize(object sender, EventArgs e)
         {
             if (FormWindowState.Minimized == this.WindowState)
             {
-                notifyIcon1.BalloonTipText = "The capture is still working in background.";
-                notifyIcon1.BalloonTipTitle = this.Text;
-                notifyIcon1.BalloonTipIcon = ToolTipIcon.Info; 
-                notifyIcon1.Visible = true;
-                notifyIcon1.ShowBalloonTip(1000);
+                ShowNotifyIcon();
                 this.Hide();
-            }
-            else if (FormWindowState.Normal == this.WindowState)
-            {
-                notifyIcon1.Visible = false;
             }
         }
 
@@ -216,6 +234,7 @@ namespace WindowsFormsApplication1
         {
             this.Show();
             this.WindowState = FormWindowState.Normal;
+            notifyIcon1.Visible = false;
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
@@ -224,7 +243,7 @@ namespace WindowsFormsApplication1
             // this means that we're probably forcibly closing the application
             // like when the Windows account is logged off, or when Windows
             // is being shut down
-            if (FormWindowState.Minimized == this.WindowState)
+            if (!this.Visible)
             {
                 return; // just close the application
             }
@@ -244,6 +263,11 @@ namespace WindowsFormsApplication1
             {
                 e.Cancel = true;
             }
+        }
+
+        private void Form1_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Application.Exit();
         }
     }
 
