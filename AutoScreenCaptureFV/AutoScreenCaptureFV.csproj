@@ -28,8 +28,8 @@
     <ProductName>Auto Screen Capture FV</ProductName>
     <PublisherName>Ivan Zahariev %28famzah%29</PublisherName>
     <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
-    <ApplicationRevision>12</ApplicationRevision>
-    <ApplicationVersion>1.1.0.%2a</ApplicationVersion>
+    <ApplicationRevision>2</ApplicationRevision>
+    <ApplicationVersion>1.2.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
@@ -59,10 +59,10 @@
     <ApplicationIcon>Monitor.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>330814F4BF0810A0F6ACE73CBE2E0E87864AF77C</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>E7E91105B6796BDDFFAB90AF74CFF3EC68A7B71C</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestKeyFile>AutoScreenCaptureFV_TemporaryKey.pfx</ManifestKeyFile>
+    <ManifestKeyFile>AutoScreenCaptureFV_1_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
     <GenerateManifests>true</GenerateManifests>
@@ -112,6 +112,7 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <None Include="app.config" />
+    <None Include="AutoScreenCaptureFV_1_TemporaryKey.pfx" />
     <None Include="AutoScreenCaptureFV_TemporaryKey.pfx" />
     <None Include="Properties\app.manifest" />
     <None Include="Properties\Settings.settings">
