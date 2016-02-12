@@ -35,11 +35,12 @@ namespace WindowsFormsApplication1
             showStatus("Stopped", false);
             numericUpDown1.Value = Convert.ToInt32(RegistryHelper.GetSetting("Settings", "Interval", "60"));
             numericUpDown2.Value = Convert.ToInt32(RegistryHelper.GetSetting("Settings", "Cleanup", "10080"));
+
+            GetSettingIntoCheckbox("Settings", "RecycleBin", "1", checkBox2);
         }
 
         public void HandleAutoStart() {
-            string autoStartConf = RegistryHelper.GetSetting("Settings", "AutoStart", "0");
-            checkBox1.Checked = (autoStartConf == "1");
+            GetSettingIntoCheckbox("Settings", "AutoStart", "0", checkBox1);
 
             if (checkBox1.Checked)
             {
@@ -121,7 +122,19 @@ namespace WindowsFormsApplication1
             textBox1.Enabled = false;
             button1.Enabled = false;
             button4.Enabled = true;
+            checkBox2.Enabled = false;
             timer3.Enabled = true;
+        }
+
+        private void GetSettingIntoCheckbox(string Section, string Key, string Default, CheckBox control)
+        {
+            string value = RegistryHelper.GetSetting(Section, Key, Default);
+            control.Checked = (value == "1");
+        }
+
+        private void SaveSettingFromCheckbox(string Section, string Key, CheckBox control)
+        {
+            RegistryHelper.SaveSetting(Section, Key, control.Checked ? "1" : "0");
         }
 
         private void SaveAllSettings()
@@ -129,7 +142,8 @@ namespace WindowsFormsApplication1
             RegistryHelper.SaveSetting("Settings", "Interval", numericUpDown1.Value.ToString());
             RegistryHelper.SaveSetting("Settings", "Cleanup", numericUpDown2.Value.ToString());
             RegistryHelper.SaveSetting("Settings", "RootFolder", textBox1.Text);
-            RegistryHelper.SaveSetting("Settings", "AutoStart", checkBox1.Checked ? "1" : "0");
+            SaveSettingFromCheckbox("Settings", "AutoStart", checkBox1);
+            SaveSettingFromCheckbox("Settings", "RecycleBin", checkBox2);
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -145,6 +159,7 @@ namespace WindowsFormsApplication1
             textBox1.Enabled = true;
             button1.Enabled = true;
             button4.Enabled = false;
+            checkBox2.Enabled = true;
             showStatus("Stopped", false);
         }
 
@@ -198,7 +213,21 @@ namespace WindowsFormsApplication1
                     foreach (string filename in imgfiles)
                     {
                         //File.Delete(filename);
-                        FileSystem.DeleteFile(filename, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
+
+                        RecycleOption recycleOpt;
+                        if (checkBox2.Checked)
+                        {
+                            recycleOpt = RecycleOption.SendToRecycleBin;
+                        }
+                        else
+                        {
+                            recycleOpt = RecycleOption.DeletePermanently;
+                        }
+                        FileSystem.DeleteFile(
+                            filename,
+                            UIOption.OnlyErrorDialogs,
+                            recycleOpt
+                        );
                     }
                 }
             }
