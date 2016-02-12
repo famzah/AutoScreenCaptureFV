@@ -120,12 +120,16 @@ namespace WindowsFormsApplication1
             numericUpDown2.Enabled = false;
             textBox1.Enabled = false;
             button1.Enabled = false;
+            button4.Enabled = true;
+            timer3.Enabled = true;
+        }
+
+        private void SaveAllSettings()
+        {
             RegistryHelper.SaveSetting("Settings", "Interval", numericUpDown1.Value.ToString());
             RegistryHelper.SaveSetting("Settings", "Cleanup", numericUpDown2.Value.ToString());
             RegistryHelper.SaveSetting("Settings", "RootFolder", textBox1.Text);
             RegistryHelper.SaveSetting("Settings", "AutoStart", checkBox1.Checked ? "1" : "0");
-            button4.Enabled = true;
-            timer3.Enabled = true;
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -267,6 +271,7 @@ namespace WindowsFormsApplication1
 
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)
         {
+            SaveAllSettings();
             Application.Exit();
         }
     }
