@@ -37,6 +37,9 @@ namespace WindowsFormsApplication1
             numericUpDown2.Value = Convert.ToInt32(RegistryHelper.GetSetting("Settings", "Cleanup", "10080"));
 
             GetSettingIntoCheckbox("Settings", "RecycleBin", "1", checkBox2);
+
+            // hide this button; it's useful only during debugging
+            button4.Visible = false;
         }
 
         public void HandleAutoStart() {
