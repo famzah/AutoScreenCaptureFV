@@ -20,7 +20,7 @@ This application features the following:
 
 Old image files are actually moved to "Recycle bin" by default, in order to be on the safe side -- if we have a bug, no files are lost.
 
-Auto Screen Capture FV has been tested on Windows 7.
+Auto Screen Capture FV has been tested on Windows 7, and Windows 10.
 
 # Download links
 
